@@ -64,9 +64,22 @@ export default function App() {
           <Text style={styles.fill}>Recording {index + 1} - {recordingLine.duration}</Text>
           <Button style={styles.button} onPress={() => recordingLine.sound.replayAsync()} title="Play"></Button>
           <Button style={styles.button} onPress={() => Sharing.shareAsync(recordingLine.file)} title="Share"></Button>
+          <Button style={styles.button} onPress={() => deleteRecording(index)} title="Delete"></Button>
         </View>
       );
     });
+  }
+  
+  //delete rec function
+  async function deleteRecording(index) {
+    const updatedRecordings = [...recordings];
+    const recordingToDelete = updatedRecordings[index];
+  
+    if (recordingToDelete.sound) {
+      await recordingToDelete.sound.unloadAsync();
+    }
+      updatedRecordings.splice(index, 1);
+    setRecordings(updatedRecordings);
   }
 
 //   async function playSound(){
