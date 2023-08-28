@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, StyleSheet, Button } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
+import { Button } from '@rneui/themed';
 import { Audio } from 'expo-av';
 import { setStatusBarBackgroundColor } from 'expo-status-bar';
 import * as Sharing from 'expo-sharing'
@@ -61,11 +62,31 @@ export default function App() {
     return recordings.map((recordingLine, index) => {
       return (
         <View key={index} style={styles.row}>
-          <Text style={styles.fill}>Recording {index + 1} - {recordingLine.duration}</Text>
-          <Button style={styles.button} onPress={() => recordingLine.sound.replayAsync()} title="Play"></Button>
-          <Button style={styles.button} onPress={() => Sharing.shareAsync(recordingLine.file)} title="Share"></Button>
-          <Button style={styles.button} onPress={() => deleteRecording(index)} title="Delete"></Button>
-        </View>
+  <Text style={styles.fill}>Recording {index + 1} - {recordingLine.duration}</Text>
+  <View style={styles.buttonContainer}>
+    <Button  
+      size="sm"
+      onPress={() => recordingLine.sound.replayAsync()}
+      title="Play"
+      style={[styles.button, styles.singleButton]}
+    />
+    <Button  
+      size="sm"
+      color="secondary"
+      onPress={() => Sharing.shareAsync(recordingLine.file)}
+      title="Share"
+      style={[styles.button, styles.singleButton]}
+    />
+    <Button  
+      size="sm"
+      color="error"
+      onPress={() => deleteRecording(index)}
+      title="Delete"
+      style={[styles.button, styles.singleButton]}
+    />
+  </View>
+</View>
+
       );
     });
   }
@@ -91,8 +112,9 @@ export default function App() {
 // }
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} >
       <Button
+        type="outline"
         title={recording ? 'Stop Recording' : 'Start Recording'}
         onPress={recording ? stopRecording : startRecording}
       />
@@ -112,12 +134,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: 1, //space between rows
+    padding: 1,
+    backgroundColor: '#f5f5f5',
   },
   fill: {
     flex: 1,
-    margin: 16
+    margin: 16,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 10, //space between buttons
+    marginRight: 5,
   },
   button: {
-    margin: 16
-  }
+    margin: 1,
+  },
+  singleButton: {
+    marginLeft: 2, //control the separation
+  },
 });
+//
